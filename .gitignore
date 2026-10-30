@@ -1,0 +1,26 @@
+# 默认全部忽略，只放行配置文本（白名单）
+*
+!*/
+!.gitignore
+!README.md
+!AGENTS.md
+!.githooks/*
+!profiles/*/cordis.yml
+!profiles/*/cordis.patch.yml
+!profiles/*/package.json
+!profiles/*/pnpm-lock.yaml
+!profiles/*/pnpm-workspace.yaml
+
+# 显式再挡一层：任何位置都不进仓库
+.credentials.yaml
+*.env
+*.env.*
+**/settings.json
+*.bak
+backups/
+sessions/
+storages/
+logs/
+cache/
+attachments/
+node_modules/
