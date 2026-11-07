@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# DSH 配置仓库 pre-commit 检查
+#   1) 文件名层面：拦私密/密钥/备份文件
+#   2) 内容层面：拦常见密钥形态
+#   3) 内容层面：拦 .md 里的本机绝对路径
+set -uo pipefail
+
+red() { printf '\033[31m%s\033[0m\n' "$*" >&2; }
+die() { red "✗ $*"; exit 1; }
+
+staged=$(git diff --cached --name-only --diff-filter=ACMR)
+[ -z "$staged" ] && exit 0
+
+# 1) 文件名
+while IFS= read -r f; do
+  [ -z "$f" ] && continue
+  case "$f" in
+    *credential*|*.env|*.env.*|*settings.json|*.bak|*.pem|*.key|*.p12|*.pfx|*.kdbx|*id_rsa*|*id_ed25519*|*id_ecdsa*)
+      die "拒绝提交疑似私密文件：$f" ;;
+  esac
+done <<< "$staged"
+
+# 2) 密钥形态（模式本身不含可命中的样例值）
+secret_re='-----BEGIN [A-Z ]*PRIVATE KEY-----|sk-[A-Za-z0-9_-]{16,}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|AKIA[0-9A-Z]{16}|xox[abprs]-[A-Za-z0-9-]{8,}|(api[_-]?key|secret|passwd|password)[[:space:]]*[:=][[:space:]]*["'"'"']?[A-Za-z0-9/+_-]{16,}'
+while IFS= read -r f; do
+  [ -z "$f" ] && continue
+  hits=$(git show ":$f" 2>/dev/null | grep -inE -- "$secret_re")
+  [ -n "$hits" ] && die "疑似密钥命中：$f
+$hits"
+done <<< "$staged"
+
+# 3) .md 里的本机绝对路径
+home_re='(/home/[a-z][a-z0-9_-]*/|/Users/[A-Za-z][A-Za-z0-9_-]*/|[A-Za-z]:\\\\+Users\\\\+)'
+while IFS= read -r f; do
+  case "$f" in
+    *.md)
+      hits=$(git show ":$f" 2>/dev/null | grep -inE -- "$home_re")
+      [ -n "$hits" ] && die "$f 含本机绝对路径，改成 ~/ 或相对路径
+$hits"
+      ;;
+  esac
+done <<< "$staged"
+
+# 4) 私网 / CGNAT / link-local IP 字面量（内网拓扑不入库）
+net_re='\b(10\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}|192\.168\.[0-9]{1,3}\.[0-9]{1,3}|172\.(1[6-9]|2[0-9]|3[01])\.[0-9]{1,3}\.[0-9]{1,3}|100\.(6[4-9]|[7-9][0-9]|1[01][0-9]|12[0-7])\.[0-9]{1,3}\.[0-9]{1,3}|169\.254\.[0-9]{1,3}\.[0-9]{1,3})'
+while IFS= read -r f; do
+  [ -z "$f" ] && continue
+  hits=$(git show ":$f" 2>/dev/null | grep -nE -- "$net_re")
+  [ -n "$hits" ] && die "私网/CGNAT IP 不入库：$f
+$hits"
+done <<< "$staged"
+
+printf '✓ pre-commit 检查通过（%s 个文件）\n' "$(printf '%s\n' "$staged" | wc -l)"
