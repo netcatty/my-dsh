@@ -8,6 +8,45 @@ set -uo pipefail
 red() { printf '\033[31m%s\033[0m\n' "$*" >&2; }
 die() { red "✗ $*"; exit 1; }
 
+# 0) dsh-guard 策略脱敏：暂存区里的 webBase 若是本机地址，换成占位符再提交。
+#    只改暂存区（index）里的 blob；本地工作区文件内容不动。
+POLICY=dsh-plugins/dsh-guard/policy.json
+if git diff --cached --name-only --diff-filter=ACMR | grep -qx "$POLICY"; then
+  staged_copy=$(mktemp "${TMPDIR:-/tmp}/dsh-policy-staged-XXXXXX.json")
+  git show ":$POLICY" > "$staged_copy"
+  status=0
+  python3 - "$staged_copy" <<'REDACT' || status=$?
+import json, sys
+path = sys.argv[1]
+with open(path, encoding='utf-8') as handle:
+    doc = json.load(handle)
+perm = doc.get('permission') or {}
+web = perm.get('webBase')
+if isinstance(web, str) and web.strip():
+    perm['webBase'] = '<REDACTED:LOCAL_URL>'
+    doc['permission'] = perm
+    with open(path, 'w', encoding='utf-8') as handle:
+        json.dump(doc, handle, ensure_ascii=False, indent=2)
+        handle.write('\n')
+    sys.exit(42)
+sys.exit(0)
+REDACT
+  case "$status" in
+    0) ;;
+    42)
+      blob=$(git hash-object -w "$staged_copy")
+      git update-index --cacheinfo 100644,"$blob","$POLICY"
+      printf '· 已自动把 %s 的 webBase 换成占位符\n' "$POLICY"
+      ;;
+    *)
+      red "✗ 处理 $POLICY 失败"
+      rm -f "$staged_copy"
+      exit 1
+      ;;
+  esac
+  rm -f "$staged_copy"
+fi
+
 staged=$(git diff --cached --name-only --diff-filter=ACMR)
 [ -z "$staged" ] && exit 0
 
