@@ -10,6 +10,11 @@
 !profiles/*/package.json
 !profiles/*/pnpm-lock.yaml
 !profiles/*/pnpm-workspace.yaml
+# 插件策略：只放行 hand-written 规则，运行态与含凭据的配置仍被挡住
+!dsh-plugins/dsh-guard/policy.json
+!dsh-plugins/dsh-guard/policy.schema.json
+dsh-plugins/*/audit.jsonl
+dsh-plugins/*/status.json
 
 # 显式再挡一层：任何位置都不进仓库
 .credentials.yaml
