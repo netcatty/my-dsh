@@ -15,22 +15,8 @@ if git diff --cached --name-only --diff-filter=ACMR | grep -qx "$POLICY"; then
   staged_copy=$(mktemp "${TMPDIR:-/tmp}/dsh-policy-staged-XXXXXX.json")
   git show ":$POLICY" > "$staged_copy"
   status=0
-  python3 - "$staged_copy" <<'REDACT' || status=$?
-import json, sys
-path = sys.argv[1]
-with open(path, encoding='utf-8') as handle:
-    doc = json.load(handle)
-perm = doc.get('permission') or {}
-web = perm.get('webBase')
-if isinstance(web, str) and web.strip():
-    perm['webBase'] = '<REDACTED:LOCAL_URL>'
-    doc['permission'] = perm
-    with open(path, 'w', encoding='utf-8') as handle:
-        json.dump(doc, handle, ensure_ascii=False, indent=2)
-        handle.write('\n')
-    sys.exit(42)
-sys.exit(0)
-REDACT
+  # Windows 侧没有可用的 python3（只有商店占位符），改用 DSH 自带的 node
+  node -e 'const fs=require("fs");const p=process.argv[1];const d=JSON.parse(fs.readFileSync(p,"utf8"));const perm=d.permission||{};const w=perm.webBase;if(typeof w==="string"&&w.trim()){perm.webBase="<REDACTED:LOCAL_URL>";d.permission=perm;fs.writeFileSync(p,JSON.stringify(d,null,2)+"\n");process.exit(42);}process.exit(0);' "$staged_copy" || status=$?
   case "$status" in
     0) ;;
     42)

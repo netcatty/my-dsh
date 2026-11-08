@@ -12,14 +12,14 @@ importers:
         specifier: ^1.7.2
         version: 1.7.2
       '@netcatty/dsh-guard':
-        specifier: link:~/Documents/code/dsh-plugins/dsh-guard
-        version: link:../../../Documents/code/dsh-plugins/dsh-guard
+        specifier: link:D://code//dsh-plugins//dsh-guard
+        version: link:D:/code/dsh-plugins/dsh-guard
       '@netcatty/dsh-mcp':
-        specifier: link:~/Documents/code/dsh-plugins/dsh-mcp
-        version: link:../../../Documents/code/dsh-plugins/dsh-mcp
+        specifier: link:D://code//dsh-plugins//dsh-mcp
+        version: link:D:/code/dsh-plugins/dsh-mcp
       '@netcatty/dsh-session':
-        specifier: link:~/Documents/code/dsh-plugins/dsh-session
-        version: link:../../../Documents/code/dsh-plugins/dsh-session
+        specifier: link:D://code//dsh-plugins//dsh-session
+        version: link:D:/code/dsh-plugins/dsh-session
       dshmarket:
         specifier: 1.70.2
         version: 1.70.2

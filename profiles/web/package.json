@@ -3,9 +3,9 @@
   "private": true,
   "dependencies": {
     "@kenz1117/dsh-ui-usage-billing": "^1.7.2",
-    "@netcatty/dsh-guard": "link:~/Documents/code/dsh-plugins/dsh-guard",
-    "@netcatty/dsh-mcp": "link:~/Documents/code/dsh-plugins/dsh-mcp",
-    "@netcatty/dsh-session": "link:~/Documents/code/dsh-plugins/dsh-session",
+    "@netcatty/dsh-guard": "link:D://code//dsh-plugins//dsh-guard",
+    "@netcatty/dsh-mcp": "link:D://code//dsh-plugins//dsh-mcp",
+    "@netcatty/dsh-session": "link:D://code//dsh-plugins//dsh-session",
     "dshmarket": "1.70.2"
   },
   "dsh": {

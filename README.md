@@ -15,11 +15,10 @@
 
 ## 新机器恢复
 
-```bash
-git clone <repo> ~/.dsh-config-tmp
-cp -a ~/.dsh-config-tmp/. ~/.dsh/
-cd ~/.dsh && git init -q && git config core.hooksPath .githooks
-chmod +x .githooks/pre-commit
+```powershell
+git clone <repo> ~\.dsh-config-tmp
+Copy-Item ~\.dsh-config-tmp\* ~\.dsh\ -Recurse -Force
+cd ~\.dsh; git init -q; git config core.hooksPath .githooks
 ```
 
 凭据、MCP 服务器配置、会话数据需要自己另填。
