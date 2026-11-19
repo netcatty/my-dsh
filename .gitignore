@@ -17,6 +17,7 @@ dsh-plugins/*/audit.jsonl
 dsh-plugins/*/status.json
 
 # 显式再挡一层：任何位置都不进仓库
+.openidea/
 .credentials.yaml
 *.env
 *.env.*
