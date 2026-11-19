@@ -113,12 +113,14 @@
         api: openai-completions
         baseURL: http://127.0.0.1:3425/v1
         # 模型清单由网关决定，不入库；magpie 启动后会自动同步
+        streamIdleTimeoutMs: 600000
       magpie-anthropic:
         displayName: Magpie · Anthropic
         apiKeyEnv: MAGPIE_GATEWAY_KEY
         api: anthropic-messages
         baseURL: http://127.0.0.1:3425
         # 模型清单由网关决定，不入库；magpie 启动后会自动同步
+        streamIdleTimeoutMs: 600000
       magpie-responses:
         displayName: Magpie · Responses
         apiKeyEnv: MAGPIE_GATEWAY_KEY

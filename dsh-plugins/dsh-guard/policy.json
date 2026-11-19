@@ -293,6 +293,6 @@
     "repeatLimit": 3,
     "tools": {},
     "sandboxAware": true,
-    "webBase": ""
+    "webBase": "<REDACTED:LOCAL_URL>"
   }
 }

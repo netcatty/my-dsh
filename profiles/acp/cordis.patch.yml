@@ -1,0 +1,45 @@
+# Your patch layer for this dsh profile, applied after every bundle layer:
+# a top-level YAML array of loader patch entries (id-targeted config
+# overrides, disables, and insert lists; `!!js` expressions allowed).
+- id: llm-pi-ai # magpie
+  name: "@deepseek-ai/dsh-llm-pi-ai"
+  config:
+    providers:
+      magpie:
+        displayName: Magpie
+        apiKeyEnv: MAGPIE_GATEWAY_KEY
+        api: openai-completions
+        baseURL: http://127.0.0.1:3425/v1
+        # 模型清单由网关决定，不入库；magpie 启动后会自动同步
+        streamIdleTimeoutMs: 600000
+      magpie-anthropic:
+        displayName: Magpie · Anthropic
+        apiKeyEnv: MAGPIE_GATEWAY_KEY
+        api: anthropic-messages
+        baseURL: http://127.0.0.1:3425
+        # 模型清单由网关决定，不入库；magpie 启动后会自动同步
+        streamIdleTimeoutMs: 600000
+- id: agent-default-model # magpie
+  config:
+    provider: magpie
+    model: "deepseek/deepseek-flash"
+# 关闭 web 搜索：无 DeepSeek 凭证时 dsh-tool-web 本就不会提供 web_search，显式关闭省 schema
+- id: tool-web
+  config:
+    fetch: true
+    search: false
+    searchTimeoutMs: 60000
+# 对齐 daily 预设：goal / workflow 在 daily 里未声明，关闭全部相关行
+# （schedule 在 acp 组合中本就不存在，无需处理）
+- id: tool-goal
+  disabled: true
+- id: command-goal
+  disabled: true
+- id: goal
+  disabled: true
+- id: goal-round-driver
+  disabled: true
+- id: tool-workflow
+  disabled: true
+- id: workflow-ptc
+  disabled: true

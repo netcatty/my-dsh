@@ -2,9 +2,10 @@
   "name": "dsh-profile-web",
   "private": true,
   "dependencies": {
-    "@kenz1117/dsh-ui-usage-billing": "^1.7.2",
+    "@kenz1117/dsh-ui-usage-billing": "1.8.3",
     "@netcatty/dsh-guard": "link:D://code//dsh-plugins//dsh-guard",
     "@netcatty/dsh-mcp": "link:D://code//dsh-plugins//dsh-mcp",
+    "@netcatty/dsh-rewind": "link:D:/code/dsh-plugins/dsh-rewind",
     "@netcatty/dsh-session": "link:D://code//dsh-plugins//dsh-session",
     "dshmarket": "1.70.2"
   },
@@ -17,7 +18,8 @@
         "@kenz1117/dsh-ui-usage-billing",
         "@netcatty/dsh-mcp",
         "@netcatty/dsh-session",
-        "@netcatty/dsh-guard"
+        "@netcatty/dsh-guard",
+        "@netcatty/dsh-rewind"
       ]
     }
   }

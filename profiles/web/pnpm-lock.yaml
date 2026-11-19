@@ -9,14 +9,17 @@ importers:
   .:
     dependencies:
       '@kenz1117/dsh-ui-usage-billing':
-        specifier: ^1.7.2
-        version: 1.7.2
+        specifier: 1.8.3
+        version: 1.8.3
       '@netcatty/dsh-guard':
         specifier: link:D://code//dsh-plugins//dsh-guard
         version: link:D:/code/dsh-plugins/dsh-guard
       '@netcatty/dsh-mcp':
         specifier: link:D://code//dsh-plugins//dsh-mcp
         version: link:D:/code/dsh-plugins/dsh-mcp
+      '@netcatty/dsh-rewind':
+        specifier: link:D:/code/dsh-plugins/dsh-rewind
+        version: link:D:/code/dsh-plugins/dsh-rewind
       '@netcatty/dsh-session':
         specifier: link:D://code//dsh-plugins//dsh-session
         version: link:D:/code/dsh-plugins/dsh-session
@@ -26,8 +29,8 @@ importers:
 
 packages:
 
-  '@kenz1117/dsh-ui-usage-billing@1.7.2':
-    resolution: {integrity: sha512-YHSgRNz89eFpwSHKjg7U5S7e4nhMsfKXYelyT2ZQPUpRiVU9s3u6ha9ES6Iw8/hfntsj0RlLGxBpSKGCaDwA1Q==}
+  '@kenz1117/dsh-ui-usage-billing@1.8.3':
+    resolution: {integrity: sha512-awZNaZmMpZb2dUZeHbqIqQfNuOtVWw5I0ik7MdDdNb2GVtGylOhHL6rgC5Xy69XAOo8hIdjhnrUaby3dhgqfvA==}
     engines: {dsh: '>=0.1.2-alpha.1', node: ^22.19.0 || >=24.0.0}
     peerDependencies:
       '@deepseek-ai/cordis': '*'
@@ -39,6 +42,7 @@ packages:
       '@deepseek-ai/dsh-client-ui-commands': '*'
       '@deepseek-ai/dsh-client-ui-conversation': '*'
       '@deepseek-ai/dsh-client-ui-primitives': '*'
+      '@deepseek-ai/dsh-client-ui-settings': '*'
       '@deepseek-ai/dsh-client-ui-sidebar': '*'
       '@deepseek-ai/dsh-client-ui-slots': '*'
       '@deepseek-ai/dsh-client-ui-workspace': '*'
@@ -50,7 +54,6 @@ packages:
       '@deepseek-ai/dsh-session': '*'
       '@deepseek-ai/dsh-session-persistence': '*'
       '@deepseek-ai/dsh-settings': '*'
-      '@deepseek-ai/dsh-token-meter': '*'
       '@deepseek-ai/dsh-tools': '*'
       '@deepseek-ai/schemastery': '*'
       react: ^18.2.0
@@ -84,7 +87,7 @@ packages:
 
 snapshots:
 
-  '@kenz1117/dsh-ui-usage-billing@1.7.2':
+  '@kenz1117/dsh-ui-usage-billing@1.8.3':
     dependencies:
       clsx: 2.1.1
 

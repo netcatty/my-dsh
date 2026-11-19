@@ -1,0 +1,13 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: false
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      '@netcatty/dsh-mcp':
+        specifier: link:D:/code/dsh-plugins/dsh-mcp
+        version: link:D:/code/dsh-plugins/dsh-mcp

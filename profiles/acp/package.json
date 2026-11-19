@@ -1,0 +1,16 @@
+{
+  "name": "dsh-profile-acp",
+  "private": true,
+  "dependencies": {
+    "@netcatty/dsh-mcp": "link:D:/code/dsh-plugins/dsh-mcp"
+  },
+  "dsh": {
+    "profile": {
+      "bundles": [
+        "@deepseek-ai/dsh-base",
+        "@deepseek-ai/dsh-acp-app",
+        "@netcatty/dsh-mcp"
+      ]
+    }
+  }
+}
