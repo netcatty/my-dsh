@@ -112,18 +112,14 @@
         apiKeyEnv: MAGPIE_GATEWAY_KEY
         api: openai-completions
         baseURL: http://127.0.0.1:3425/v1
+        streamIdleTimeoutMs: 600000
         # 模型清单由网关决定，不入库；magpie 启动后会自动同步
       magpie-anthropic:
         displayName: Magpie · Anthropic
         apiKeyEnv: MAGPIE_GATEWAY_KEY
         api: anthropic-messages
         baseURL: http://127.0.0.1:3425
-        # 模型清单由网关决定，不入库；magpie 启动后会自动同步
-      magpie-responses:
-        displayName: Magpie · Responses
-        apiKeyEnv: MAGPIE_GATEWAY_KEY
-        api: openai-responses
-        baseURL: http://127.0.0.1:3425/v1
+        streamIdleTimeoutMs: 600000
         # 模型清单由网关决定，不入库；magpie 启动后会自动同步
 - id: llm-deepseek
   name: "@deepseek-ai/dsh-llm-deepseek-api-key"
@@ -150,3 +146,14 @@
     provider: magpie
     model: "deepseek/deepseek-flash"
     reasoningEffort: "high"
+
+- id: ui-conversation
+  name: "@deepseek-ai/dsh-client-ui-conversation"
+  config:
+    busyEnter: queue
+- id: plugin-market
+  name: "@deepseek-ai/dsh-plugin-market"
+  config:
+    indexes:
+      - https://cdn.jsdelivr.net/npm/dsh-plugin-catalog/index.json
+      - https://dshopen.org/index.json
