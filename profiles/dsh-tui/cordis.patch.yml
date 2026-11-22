@@ -1,0 +1,136 @@
+# Your patch layer for this dsh profile, applied after every bundle layer:
+# a top-level YAML array of loader patch entries (id-targeted config
+# overrides, disables, and insert lists; `!!js` expressions allowed).
+# 从 web profile 迁移的自定义 Agent preset「日常」。
+# TUI 自带的 registry 行（dsh-tui-agent-preset-registry）会发现这行声明并挂载；
+# 与 web 保持一致：只挂 tool-bash（本机 bash 在 PATH 上）。
+- insert:
+    - id: preset-daily
+      name: "@deepseek-ai/dsh-agent-preset"
+      config:
+        id: daily
+        name: 日常
+        order: 4
+        plugins:
+          - id: persona
+            name: "@deepseek-ai/dsh-persona"
+            config:
+              prefix: You are a coding agent powered by the {{model}} model.
+          - id: agent-instructions
+            name: "@deepseek-ai/dsh-agent-instructions"
+            config:
+              maxBytes: 65536
+          - id: tool-bash
+            name: "@deepseek-ai/dsh-tool-bash"
+          - id: tool-fs
+            name: "@deepseek-ai/dsh-tool-fs"
+          - id: tool-fs-search
+            name: "@deepseek-ai/dsh-tool-fs-search"
+            config:
+              sampleOverCapGlobResults: false
+          - id: tool-jobs
+            name: "@deepseek-ai/dsh-tool-jobs"
+          - id: skill-filesystem
+            name: "@deepseek-ai/dsh-skill-filesystem"
+          - id: tool-skill
+            name: "@deepseek-ai/dsh-tool-skill"
+          - id: planning
+            name: cordis:group
+            group: true
+            isolate:
+              planMode: true
+            config:
+              - id: plan-mode
+                name: "@deepseek-ai/dsh-plan-mode"
+                config:
+                  section: You are in plan mode. Explore without mutating anything, then call
+                    exit_plan_mode with a decision-complete plan. Do not
+                    implement until the user approves.
+          - id: compaction
+            name: cordis:group
+            group: true
+            isolate:
+              compaction: true
+              toolResultPruner: true
+            config:
+              - id: compaction-basic
+                name: "@deepseek-ai/dsh-compaction-basic"
+              - id: command-compact
+                name: "@deepseek-ai/dsh-command-compact"
+              - id: tool-result-pruner
+                name: "@deepseek-ai/dsh-compaction-tool-result-pruner"
+                config:
+                  thresholdChars: 8192
+                  headChars: 4096
+                  tailChars: 1024
+          - id: delegation
+            name: cordis:group
+            group: true
+            isolate:
+              workflowEngine: true
+            config:
+              - id: tool-subagent-control
+                name: "@deepseek-ai/dsh-tool-subagent-control"
+              - id: tool-subagent
+                name: "@deepseek-ai/dsh-tool-subagent"
+                config:
+                  provider: spawn
+                  toolName: subagent
+                  modelSelectionSettings: true
+              - id: tool-subagent-fork
+                name: "@deepseek-ai/dsh-tool-subagent"
+                config:
+                  provider: fork
+                  toolName: subagent_fork
+          - id: tool-ask-user
+            name: "@deepseek-ai/dsh-tool-ask-user"
+          - id: tool-todo
+            name: "@deepseek-ai/dsh-tool-todo"
+            config:
+              allowParallelInProgress: true
+          - id: tool-web
+            name: "@deepseek-ai/dsh-tool-web"
+            config:
+              search: false
+              fetch: true
+          - id: present
+            name: "@deepseek-ai/dsh-tool-present"
+
+# @netcatty/dsh-guard 的 bundle patch 是空数组（[]），行必须由 profile 插入；
+# 与 web profile 的写法一致。dsh-mcp 由它自己的 bundle patch 插入 `mcp` 行。
+- insert:
+    - id: guard
+      name: '@netcatty/dsh-guard'
+
+- id: llm-pi-ai # magpie
+  name: "@deepseek-ai/dsh-llm-pi-ai"
+  config:
+    providers:
+      magpie:
+        displayName: Magpie
+        apiKeyEnv: MAGPIE_GATEWAY_KEY
+        api: openai-completions
+        baseURL: http://127.0.0.1:3425/v1
+        # 模型清单由网关决定，不入库；magpie 启动后会自动同步
+        streamIdleTimeoutMs: 600000
+        retryPolicy:
+          mode: normal
+          maxRetries: 5
+          retryableCodes:
+            - EMPTY_RESPONSE
+            - RATE_LIMIT
+            - SERVER
+            - TIMEOUT
+            - TRANSPORT
+            - STREAM_CLOSED
+      magpie-anthropic:
+        displayName: Magpie · Anthropic
+        apiKeyEnv: MAGPIE_GATEWAY_KEY
+        api: anthropic-messages
+        baseURL: http://127.0.0.1:3425
+        # 模型清单由网关决定，不入库；magpie 启动后会自动同步
+        streamIdleTimeoutMs: 600000
+- id: agent-default-model # magpie
+  config:
+    provider: magpie
+    model: "deepseek/deepseek-flash"

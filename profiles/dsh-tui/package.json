@@ -1,0 +1,21 @@
+{
+  "name": "dsh-profile-dsh-tui",
+  "private": true,
+  "dependencies": {
+    "@deepseek-harness-tui/dsh-tui": "0.20.2",
+    "@netcatty/dsh-guard": "link:~/Documents/code/dsh-plugins/dsh-guard",
+    "@netcatty/dsh-mcp": "link:~/Documents/code/dsh-plugins/dsh-mcp",
+    "@netcatty/dsh-tui-cost": "link:~/Documents/code/dsh-plugins/dsh-tui-cost"
+  },
+  "dsh": {
+    "profile": {
+      "bundles": [
+        "@deepseek-ai/dsh-base",
+        "@deepseek-harness-tui/dsh-tui",
+        "@netcatty/dsh-guard",
+        "@netcatty/dsh-mcp",
+        "@netcatty/dsh-tui-cost"
+      ]
+    }
+  }
+}
