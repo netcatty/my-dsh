@@ -152,3 +152,8 @@
     provider: magpie
     model: "deepseek/deepseek-flash"
     reasoningEffort: "high"
+- id: plugin-market
+  name: "@deepseek-ai/dsh-plugin-market"
+  config:
+    indexes:
+      - https://cdn.jsdelivr.net/npm/dsh-plugin-catalog/index.json

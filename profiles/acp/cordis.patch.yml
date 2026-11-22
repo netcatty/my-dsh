@@ -43,3 +43,8 @@
   disabled: true
 - id: workflow-ptc
   disabled: true
+# 会话默认模型改走 magpie（shipped acp 默认 deepseek-official/deepseek-v4-flash）
+- id: acp
+  config:
+    provider: magpie
+    model: deepseek/deepseek-flash

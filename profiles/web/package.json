@@ -6,20 +6,19 @@
     "@netcatty/dsh-guard": "link:D://code//dsh-plugins//dsh-guard",
     "@netcatty/dsh-mcp": "link:D://code//dsh-plugins//dsh-mcp",
     "@netcatty/dsh-rewind": "link:D:/code/dsh-plugins/dsh-rewind",
-    "@netcatty/dsh-session": "link:D://code//dsh-plugins//dsh-session",
-    "dshmarket": "1.70.2"
+    "@netcatty/dsh-session": "link:D://code//dsh-plugins//dsh-session"
   },
   "dsh": {
     "profile": {
       "bundles": [
         "@deepseek-ai/dsh-base",
         "@deepseek-ai/dsh-web-app",
-        "dshmarket",
         "@kenz1117/dsh-ui-usage-billing",
         "@netcatty/dsh-mcp",
         "@netcatty/dsh-session",
         "@netcatty/dsh-guard",
-        "@netcatty/dsh-rewind"
+        "@netcatty/dsh-rewind",
+        "@deepseek-ai/dsh-experimental-plugin-market-bundle"
       ]
     }
   }
