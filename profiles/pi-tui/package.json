@@ -1,0 +1,26 @@
+{
+  "name": "dsh-profile-pi-tui",
+  "private": true,
+  "dependencies": {
+    "@kenz1117/dsh-ui-usage-billing": "1.8.9",
+    "@netcatty/dsh-guard": "link:~/Documents/code/dsh-plugins/dsh-guard",
+    "@netcatty/dsh-mcp": "link:~/Documents/code/dsh-plugins/dsh-mcp",
+    "@netcatty/dsh-rewind": "link:~/Documents/code/dsh-plugins/dsh-rewind",
+    "@netcatty/dsh-session": "link:~/Documents/code/dsh-plugins/dsh-session",
+    "@xmoon76/dsh-pi-tui": "0.5.8"
+  },
+  "dsh": {
+    "profile": {
+      "bundles": [
+        "@deepseek-ai/dsh-base",
+        "@xmoon76/dsh-pi-tui",
+        "@kenz1117/dsh-ui-usage-billing",
+        "@netcatty/dsh-guard",
+        "@netcatty/dsh-mcp",
+        "@netcatty/dsh-rewind",
+        "@netcatty/dsh-session",
+        "@deepseek-ai/dsh-experimental-plugin-market-bundle"
+      ]
+    }
+  }
+}

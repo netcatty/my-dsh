@@ -1,9 +1,43 @@
 # Your patch layer for this dsh profile, applied after every bundle layer:
 # a top-level YAML array of loader patch entries (id-targeted config
 # overrides, disables, and insert lists; `!!js` expressions allowed).
-# 从 web profile 迁移的自定义 Agent preset「日常」。
-# TUI 自带的 registry 行（dsh-tui-agent-preset-registry）会发现这行声明并挂载；
-# 与 web 保持一致：只挂 tool-bash（本机 bash 在 PATH 上）。
+- id: llm-pi-ai # magpie
+  name: "@deepseek-ai/dsh-llm-pi-ai"
+  config:
+    providers:
+      magpie:
+        displayName: Magpie
+        apiKeyEnv: MAGPIE_GATEWAY_KEY
+        api: openai-completions
+        baseURL: http://127.0.0.1:3425/v1
+        # 模型清单由网关决定，不入库；magpie 启动后会自动同步
+        streamIdleTimeoutMs: 600000
+      magpie-anthropic:
+        displayName: Magpie · Anthropic
+        apiKeyEnv: MAGPIE_GATEWAY_KEY
+        api: anthropic-messages
+        baseURL: http://127.0.0.1:3425
+        # 模型清单由网关决定，不入库；magpie 启动后会自动同步
+        streamIdleTimeoutMs: 600000
+- id: agent-default-model # magpie
+  config:
+    provider: magpie
+    model: "deepseek/deepseek-flash"
+    reasoningEffort: "high"
+- id: pi-tui-preferences
+  name: "@xmoon76/dsh-pi-tui/preferences"
+  config:
+    legacySettingsMigrationVersion: 2
+
+- id: ui-settings-general
+  name: "@deepseek-ai/dsh-client-ui-settings-general"
+  config:
+    welcomeNoticeVersion: 2026-09-28.1
+- id: agent-preset-registry
+  name: "@deepseek-ai/dsh-agent-preset-registry"
+  config:
+    default: standard
+    selectedDefault: daily
 - insert:
     - id: preset-daily
       name: "@deepseek-ai/dsh-agent-preset"
@@ -95,42 +129,42 @@
               fetch: true
           - id: present
             name: "@deepseek-ai/dsh-tool-present"
-
-# @netcatty/dsh-guard 的 bundle patch 是空数组（[]），行必须由 profile 插入；
-# 与 web profile 的写法一致。dsh-mcp 由它自己的 bundle patch 插入 `mcp` 行。
-- insert:
     - id: guard
       name: '@netcatty/dsh-guard'
+- id: llm-deepseek
+  name: "@deepseek-ai/dsh-llm-deepseek-api-key"
+  config:
+    retryPolicy:
+      mode: normal
+      maxRetries: 10
+      backoff:
+        initialDelayMs: 10000
+        maxDelayMs: 120000
+- id: ui-usage-billing
+  config:
+    # 真机的内网/CGNAT IP 本地自填，不入库（提交钩子会拦）
+    trustedHosts: []
+- id: mcp
+  config:
+    # 服务器、激活窗口/上限都在 ~/.dsh/dsh-plugins/dsh-mcp/settings.json（设置页可改）；
+    # 这一行只声明懒加载与侧边栏偏好
+    servers: []
+    lazy: true
+    showInSidebar: true
+- id: ui-conversation
+  name: "@deepseek-ai/dsh-client-ui-conversation"
+  config:
+    busyEnter: queue
+- id: plugin-market
+  name: "@deepseek-ai/dsh-plugin-market"
+  config:
+    indexes:
+      - https://cdn.jsdelivr.net/npm/dsh-plugin-catalog/index.json
+      - https://dshopen.org/index.json
 
-- id: llm-pi-ai # magpie
-  name: "@deepseek-ai/dsh-llm-pi-ai"
+# 固定 Web 端口：包内 webserver 行默认 port: 0（每次随机），这里覆盖成稳定端口，
+# 让 dsh-ts-proxy.mjs 可以恒定转发 3088 -> 3081。
+- id: webserver
   config:
-    providers:
-      magpie:
-        displayName: Magpie
-        apiKeyEnv: MAGPIE_GATEWAY_KEY
-        api: openai-completions
-        baseURL: http://127.0.0.1:3425/v1
-        # 模型清单由网关决定，不入库；magpie 启动后会自动同步
-        streamIdleTimeoutMs: 600000
-        retryPolicy:
-          mode: normal
-          maxRetries: 5
-          retryableCodes:
-            - EMPTY_RESPONSE
-            - RATE_LIMIT
-            - SERVER
-            - TIMEOUT
-            - TRANSPORT
-            - STREAM_CLOSED
-      magpie-anthropic:
-        displayName: Magpie · Anthropic
-        apiKeyEnv: MAGPIE_GATEWAY_KEY
-        api: anthropic-messages
-        baseURL: http://127.0.0.1:3425
-        # 模型清单由网关决定，不入库；magpie 启动后会自动同步
-        streamIdleTimeoutMs: 600000
-- id: agent-default-model # magpie
-  config:
-    provider: magpie
-    model: "deepseek/deepseek-flash"
+    host: 127.0.0.1
+    port: 3081
